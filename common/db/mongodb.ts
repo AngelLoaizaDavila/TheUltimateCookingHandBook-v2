@@ -1,5 +1,5 @@
 import mongoose, { connect, disconnect as mongooseDisconnect } from "mongoose";
-
+require("dotenv").config();
 export class MongoDB {
   static mongoAlreadyInit = false;
 
@@ -12,33 +12,22 @@ export class MongoDB {
     appName?: string;
   }) {
     if (MongoDB.mongoAlreadyInit) {
+      console.log(MongoDB.mongoAlreadyInit)
       return;
     }
 
     mongoose.set("strictQuery", true);
 
     const host = params?.MONGODB_HOST || process.env.MONGODB_HOST || "";
-
-    await connect(host, {
-      user: params?.MONGODB_USER || process.env.MONGODB_USER,
-      pass: params?.MONGODB_PASS || process.env.MONGODB_PASS,
-      dbName: params?.MONGODB_NAME || process.env.MONGODB_NAME,
-      ssl: true,
-      sslCA: params?.sslCA || "rds-combined-ca-bundle.pem",
-      replicaSet: "rs0",
-      readPreference: "secondaryPreferred",
-      retryWrites: false,
-      appName: params?.appName || process.env.AWS_LAMBDA_FUNCTION_NAME || "v2",
-      driverInfo: {
-        name: params?.appName || process.env.AWS_LAMBDA_FUNCTION_NAME || "v2",
-      },
-    });
+    const uri = `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASS}@cluster0.udbqgft.mongodb.net/?retryWrites=true&w=majority`;
+    await connect(uri);
 
     MongoDB.mongoAlreadyInit = true;
   }
 
   static async destroy() {
     if (MongoDB.mongoAlreadyInit) {
+      console.log(MongoDB.mongoAlreadyInit)
       await mongooseDisconnect();
     }
 

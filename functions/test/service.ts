@@ -1,8 +1,8 @@
-import { Types } from "mongoose";
-import { MongoDB } from "./common/db/mongodb";
-import { UserModel } from "./models/user/user.model";
+import { MongoDB } from "../../common/db/mongodb";
+import { UserModel } from "../../models/user/user.model";
 
-const { MongoClient } = require("mongodb");
+
+// const { MongoClient } = require("mongodb");
 require('dotenv').config();
 
 // Replace the uri string with your connection string.
@@ -14,9 +14,8 @@ async function run() {
   try {
     await MongoDB.init()
     await UserModel.create({
-      _id: new Types.ObjectId,
-      email: "test2@test.com",
-      name: "test2",
+      email: "test1",
+      name: "test",
       password: "1234"
     })
     // const database = client.db("sample_mflix");
